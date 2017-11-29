@@ -105,21 +105,41 @@ int main(){
 								gets(cidadepj);
 								fprintf(dadospj, "%s", cidadepj);
 								fprintf(dadospj, "\n");
-								printf("Empresa e parceira (S/N)? ");
+								printf("Empresa eh parceira (Sim/Nao)? ");
 								scanf("%s", &parceira);
 								fprintf(dadospj, "%s", parceira);
 								fprintf(dadospj, "\n\n");
 								fclose(dadospj);
 								fflush(stdin);
-								
-								/*if(parceira == "S"){
-									printf("%s \n%s \n", nomepj, parceira);
-								}else if(parceira == "N"){
-									printf("Nao e parceira");
-								}	else{
-									printf("Nao eh parceira");
-								}						
-										system("pause");*/					
+									
+									//declarando e atribuindo a palavra Sim para 
+									//comparação com o que foi digitado em parceira
+									char comp1[3], comp2[3];
+									strcpy(comp1, "Sim");
+									strcpy(comp2, "sim");
+									//compara Sim com o que foi digitado em parceiras
+									if(strcmp(comp1,parceira)){
+									//gravano arquivo se for igual a Sim
+									}else{
+										fprintf(empresaparceira, "%s", nomepj);
+										fprintf(empresaparceira, "\n");
+										fprintf(empresaparceira, "%s", cnpj);
+										fprintf(empresaparceira, "\n\n");
+									}
+									//compara sim com o que foi digitado em parceiras
+									if(strcmp(comp2,parceira)){
+									//gravano arquivo se for igual a sim
+									}else{
+										fprintf(empresaparceira, "%s", nomepj);
+										fprintf(empresaparceira, "\n");
+										fprintf(empresaparceira, "%s", cnpj);
+										fprintf(empresaparceira, "\n\n");
+									}
+									
+									fclose(empresaparceira);
+										
+								printf("\n1- Voltar ao menu anterior\n");
+								scanf("%d", &menu);				
 						break;
 						
 						//cadastro de automovel
@@ -154,6 +174,36 @@ int main(){
 					}
 			break;
 			
+			case 2:
+				//Declarando tipo File para gravar em um arquivo texto
+				FILE *pfalugar;
+				FILE *pjalugar;
+				FILE *carroalugar;
+							
+				// Cria um arquivo texto para gravação 
+				pfalugar = fopen("DadosPF.txt", "r");
+				pjalugar = fopen("DadosPJ.txt", "r");
+				carroalugar = fopen("CarroDisponivel.txt", "r");
+				/*
+				char cpf_cnpj[15], dadoslocador[15], strlinha[25], locador[15];
+				
+				printf("\nDigite o CPF ou CNPJ (Somente numeros): ");
+				gets(cpf_cnpj);
+				
+				while(!feof(pfalugar)){
+					fgets(strlinha, 50, pfalugar);
+					
+					dadoslocador = locador(strlinha);
+					
+					if(strcmp(dadoslocador,cpf_cnpj)){
+						printf("\nLocador nao cadastrado");
+					}else{
+						printf("%s", nomepf);
+					}
+				}*/
+				
+			break;
+			
 			case 4:
 				//variavel para ler aquivo
 				FILE *listardisponivel;
@@ -167,15 +217,15 @@ int main(){
 				
 				//vetor para lista de carros disponiveis
 				char listadisponivel;
-				
+				//laço de repetição enquanto não chegar ao final do arquivo
 				while(!feof(listardisponivel)){
-					
+					//lista o que contem no arquivo
 					printf("%c", listadisponivel);
-
+				
 				listadisponivel = fgetc(listardisponivel);
 				
 				}
-				
+				//fecha o arquivo
 				fclose(listardisponivel);
 				
 				printf("1- Voltar ao menu anterior\n");
@@ -209,7 +259,29 @@ int main(){
 			break;
 			
 			case 6:
+			//variavel para ler aquivo
+				FILE *listarparceiras;
+				
+				//utilizando variavel para ler o arquivo
+				listarparceiras = fopen("EmpresaParceira.txt", "r");
+				
 				system("cls");
+				
+				//vetor para lista de carros disponiveis
+				char listaparceira;
+				
+				while(!feof(listarparceiras)){
+					
+					printf("%c", listaparceira);
+
+				listaparceira = fgetc(listarparceiras);
+				
+				}
+				
+				fclose(listarparceiras);
+				
+				printf("1- Voltar ao menu anterior\n");
+				scanf("%d", &menu);
 				
 				
 			break;
