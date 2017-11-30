@@ -1,24 +1,40 @@
-Amandinha rafa
 98765432100
+Amandinha rafa
 20
 F
 987078026
 amanda@amandinha.com
 JAndira
 
-Amanda Barreto
 32165498700
+Amanda Barreto
 19
 F
 987078026
 amandabarreto@hotmail.com
 Jandira
 
+98765432101
 Amanda Barreto
-98765432100
 19
 F
 987078026
 amandabarreto@hotmail.com
+Jandira
+
+89901070406
+Ana Paula
+40
+F
+945858317
+ana@barreto.com
+Jandira
+
+00998877665
+Bruno Eduardo
+20
+M
+98765430
+bruno@eduardo
 Jandira
 

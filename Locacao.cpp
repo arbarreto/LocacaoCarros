@@ -60,25 +60,7 @@ FILE* ChamaArquivo(char caminho[30], char tipo){
 void FecharArquivo(FILE *arquivo){
 	fclose(arquivo);
 }
-/*
-int BuscaCPF(File *arquivo){
-	//codigo da busca de cpf
-	
-	return 0;
-}
 
-int BuscaCNPJ(File *arquivo){
-	//codigo da busca de cnpj
-	
-	return 0;
-}
-
-int BuscaPlaca(File *arquivo){
-	//codigo da busca de placa do carro
-	
-	return 0;
-}
-*/
 struct pessoafisica dadospf;
 struct pessoajuridica dadospj;
 struct carro dadoscarro;
@@ -115,14 +97,15 @@ int main(){
 							arquivo = ChamaArquivo("DadosPF.txt", 'g'); //chamando função do arquivo e atribuindo a arquivo
 							
 							fflush(stdin); //limpa memoria do teclado
-							//cadastro de pessoa fisica
-							printf("Digite o nome: ");
-							gets(dadospf.nomepf);
-							fprintf(arquivo, "%s", dadospf.nomepf); //gravando no arquivo
-							fflush(stdin);
+							//cadastro de pessoa fisica	
 							printf("Digite o CPF (Somente numeros): ");
 							scanf("%s", &dadospf.cpf);
-							fprintf(arquivo, "\n%s", dadospf.cpf);
+							fprintf(arquivo, "%s", dadospf.cpf);
+							fflush(stdin);
+							printf("Digite o nome: ");
+							gets(dadospf.nomepf);
+							fprintf(arquivo, "\n%s", dadospf.nomepf); //gravando no arquivo
+							fflush(stdin);
 							printf("Digite a idade: ");
 							scanf("%d", &dadospf.idade);
 							fprintf(arquivo, "\n%d", dadospf.idade);//gravando no arquivo
@@ -154,15 +137,16 @@ int main(){
 							printf("\t\t\tLegal Rent a Car - Cadastrar Pessoa Juridica\n\n");
 							arquivo = ChamaArquivo("DadosPJ.txt", 'g');
 
-							fflush(stdin); //limpa memoria do teclado
+							
+							fflush(stdin);//limpa memoria do teclado
 							//cadastro de pessoa juridica
-							printf("Digite o nome da empresa: ");
-							gets(dadospj.nomepj);
-							fprintf(arquivo, "%s", dadospj.nomepj); //gravando no arquivo
-							fflush(stdin);
 							printf("Digite o CNPJ (Somente numeros): ");
 							scanf("%s", &dadospj.cnpj[i]);
-							fprintf(arquivo, "\n%s", dadospj.cnpj);
+							fprintf(arquivo, "%s", dadospj.cnpj);
+							fflush(stdin); 
+							printf("Digite o nome da empresa: ");
+							gets(dadospj.nomepj);
+							fprintf(arquivo, "\n%s", dadospj.nomepj); //gravando no arquivo
 							fflush(stdin);
 							printf("Digite o telefone (Somente numeros): ");
 							scanf("%d", &dadospj.telpj);
@@ -246,10 +230,147 @@ int main(){
 					//escolhas submenu aludar
 					switch(alugar){
 						case 1:
+							arquivo = ChamaArquivo("DadosPF.txt", 'l');
+							char cpflocador[10];
+							char placalocador[10];
+							char modelo[20];
+							char nomepf[20];
+							char linha[800];
+							int l=0, diaria=0;
+							time_t data_tempo;
+							time(&data_tempo);
 							
+							struct tm *tempo = localtime(&data_tempo);
+							struct tm *data = localtime(&data_tempo);
 							
+							system("cls");
+								
+							printf("Digite o CPF(Somente numeros): ");
+							scanf("%s", &cpflocador);
+					
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, cpflocador) != NULL){
+									l++;
+									fgets(nomepf, 20, arquivo);
+									
+								}
+							}
+
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							arquivo = ChamaArquivo("CarroDisponivel.txt", 'l');
 							
+							printf("Digite a placa do carro desejado (XXX-0000): ");
+							scanf("%s", &placalocador);
+							l=0;
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, placalocador) != NULL){
+									l++;
+									fgets(modelo, 20, arquivo);
+								}
+							}
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							
+							printf("Digite a quantidade de diarias: ");
+							scanf("%d", &diaria);
+							
+							printf("\n\n\n+---------------------------------------+\n  Nome: %s", nomepf);
+							printf("  Placa do Carro: %s\n", placalocador);
+							printf("  Modelo: %s", modelo);
+							printf("  Retirada: %d/%d/%d-%i:%i:%i\n", data->tm_mday, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							printf("  Devolucao: %d/%d/%d-%i:%i:%i\n", data->tm_mday + diaria, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							printf("+---------------------------------------+\n\n");
+							
+							arquivo = ChamaArquivo("CarroAlugado.txt", 'g');
+							
+							fprintf(arquivo,"%s", placalocador);
+							fprintf(arquivo,"\n%s", modelo);
+							fprintf(arquivo, "%d/%d/%d-%i:%i:%i\n\n", data->tm_mday + diaria, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							
+							printf("1- Voltar ao menu principal\n");
+							scanf("%d", &menu);
 						break;
+						
+					}
+			break;
+			case 3:
+				system("cls");
+				
+				printf("\t\t\tLegal Rent a Car - Devolver Carro\n\n");
+				printf("Escolha uma opcao de locador:\n 1- Pessoa Fisica\n 2- Pessoa Juridica\n");
+				scanf("%d", &devolver);
+				
+					switch(devolver){
+						case 1:
+							arquivo = ChamaArquivo("DadosPF.txt", 'l');
+							char cpflocador[10];
+							char placalocador[10];
+							char modelo[20];
+							char nomepf[20];
+							char idade[3];
+							char linha[800];
+							char idoso[2];
+							int l=0, diaria=0;
+							float valordiaria=105.35, valortotal, desconto;
+							strcpy(idoso, "20");
+							system("cls");
+								
+							printf("Digite o CPF(Somente numeros): ");
+							scanf("%s", &cpflocador);
+							
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, cpflocador) != NULL){
+									l++;
+									fgets(nomepf, 20, arquivo);
+									l++;
+									fgets(idade, 3, arquivo);
+								}
+							}
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							arquivo = ChamaArquivo("CarroAlugado.txt", 'l');
+							
+							printf("Digite a placa do carro desejado (XXX-0000): ");
+							scanf("%s", &placalocador);
+							l=0;
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, placalocador) != NULL){
+									l++;
+									fgets(modelo, 20, arquivo);
+								}
+							}
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							
+							printf("Digite a quantidade de diarias: ");
+							scanf("%d", &diaria);
+							
+							valortotal=valordiaria*diaria;
+							
+							if(strcmp(idoso, idade)){
+								desconto = valortotal*0.1;
+								valortotal = valortotal-desconto;
+								
+							printf("\n\n\n+---------------------------------------+\n  Nome: %s", nomepf);
+							printf("  Placa do Carro: %s\n", placalocador);
+							printf("  Modelo: %s", modelo);
+							printf("  Valor total: %.2f\n", valortotal);
+							printf("+---------------------------------------+\n\n");
+								
+							}else{
+							printf("\n\n\n+---------------------------------------+\n  Nome: %s", nomepf);
+							printf("  Placa do Carro: %s\n", placalocador);
+							printf("  Modelo: %s", modelo);
+							printf("Valor total: %.2f\n", valortotal);
+							printf("+---------------------------------------+\n\n");
+							}
+							
+							printf("1- Voltar ao menu principal\n");
+							scanf("%d", &menu);
+						break;
+						
 					}
 			break;
 			case 4:
@@ -280,6 +401,9 @@ int main(){
 				arquivo = ChamaArquivo("CarroAlugado.txt", 'l'); //chamando função do arquivo e atribuindo a arquivo
 				system("cls");
 				
+				
+				char devolucao[30];
+				
 				printf("\t\t\tLegal Rent a Car - Carros Alugados\n\n");
 				
 				//laço de repetição enquanto não chegar ao final do arquivo
@@ -287,10 +411,8 @@ int main(){
 					//lista o que contem no arquivo
 					fscanf(arquivo, "%s", &placacarro);
 					fscanf(arquivo, "\n%s", &modelo);
-					fscanf(arquivo, "\n%d", &ano);
-					fscanf(arquivo, "\n%s\n\n", &fabricante);
-					printf("Placa: %s\nModelo: %s\nAno: %d\nFabricante: %s\n", placacarro, modelo, ano, fabricante);
-					printf("Devolucao: 5/12/2017 - 14:33:34\n\n");
+					fscanf(arquivo, "\n%s", &devolucao);
+					printf("Placa: %s\nModelo: %s\nDevolucao: %s\n", placacarro, modelo, devolucao);
 				}
 				FecharArquivo(arquivo); // Chama função de fechar arquivo
 				
