@@ -29,6 +29,7 @@ struct carro{
 	char modelo[20];
 	int ano;
 	char fabricante[20];
+	int disponivel;
 };
 
 //Função para chamar arquivo indicando que é do tipo FILE
@@ -192,7 +193,7 @@ int main(){
 						break;
 						case 3:
 							system("cls");
-				
+							
 							printf("\t\t\tLegal Rent a Car - Cadastrar Carro\n\n");
 							arquivo = ChamaArquivo("CarroDisponivel.txt", 'g');
 							
@@ -212,10 +213,11 @@ int main(){
 							fflush(stdin);
 							printf("Digite o fabricante do carro: ");
 							scanf("%s", &dadoscarro.fabricante);
-							fprintf(arquivo, "\n%s\n\n", dadoscarro.fabricante); //gravando no arquivo
+							fprintf(arquivo, "\n%s", dadoscarro.fabricante); //gravando no arquivo
 							fflush(stdin);
-							
+							fprintf(arquivo, "\n1\n\n", dadoscarro.disponivel);
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							
 							printf("\n1- Voltar ao menu principal\n");
 							scanf("%d", &menu);	
 						break;
@@ -229,14 +231,14 @@ int main(){
 				scanf("%d", &alugar);
 					//escolhas submenu aludar
 					switch(alugar){
-						case 1:
+						case 1:{
 							arquivo = ChamaArquivo("DadosPF.txt", 'l');
 							char cpflocador[10];
 							char placalocador[10];
 							char modelo[20];
 							char nomepf[20];
 							char linha[800];
-							int l=0, diaria=0;
+							int l=0, diaria=0, pessoaexiste, carroexiste;
 							time_t data_tempo;
 							time(&data_tempo);
 							
@@ -247,17 +249,22 @@ int main(){
 								
 							printf("Digite o CPF(Somente numeros): ");
 							scanf("%s", &cpflocador);
-					
+							
 							while(fgets(linha, 800, arquivo)){
 								l++;
 								if(strstr(linha, cpflocador) != NULL){
 									l++;
 									fgets(nomepf, 20, arquivo);
-									
+									pessoaexiste=1;
 								}
 							}
-
+							
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							if(pessoaexiste!=1){
+								printf("CPF nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
 							arquivo = ChamaArquivo("CarroDisponivel.txt", 'l');
 							
 							printf("Digite a placa do carro desejado (XXX-0000): ");
@@ -268,10 +275,16 @@ int main(){
 								if(strstr(linha, placalocador) != NULL){
 									l++;
 									fgets(modelo, 20, arquivo);
+									carroexiste=1;
 								}
 							}
-							FecharArquivo(arquivo); // Chama função de fechar arquivo
 							
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							if(carroexiste!=1){
+								printf("Carro nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
 							printf("Digite a quantidade de diarias: ");
 							scanf("%d", &diaria);
 							
@@ -291,7 +304,85 @@ int main(){
 							
 							printf("1- Voltar ao menu principal\n");
 							scanf("%d", &menu);
+							}
+							}
+						break;}
+						case 2:{
+							arquivo = ChamaArquivo("DadosPJ.txt", 'l');
+							char cnpjlocador[10];
+							char placalocador[10];
+							char modelo[20];
+							char nomepj[20];
+							char linha[800];
+							int l=0, diaria=0, empresaexiste, carroexiste;
+							time_t data_tempo;
+							time(&data_tempo);
+							
+							struct tm *tempo = localtime(&data_tempo);
+							struct tm *data = localtime(&data_tempo);
+							
+							system("cls");
+								
+							printf("Digite o CNPJ(Somente numeros): ");
+							scanf("%s", &cnpjlocador);
+					
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, cnpjlocador) != NULL){
+									l++;
+									fgets(nomepj, 20, arquivo);
+									empresaexiste=1;
+								}
+							}
+
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							if(empresaexiste!=1){
+								printf("CNPJ nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
+							arquivo = ChamaArquivo("CarroDisponivel.txt", 'l');
+							
+							printf("Digite a placa do carro desejado (XXX-0000): ");
+							scanf("%s", &placalocador);
+							l=0;
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, placalocador) != NULL){
+									l++;
+									fgets(modelo, 20, arquivo);
+									carroexiste=1;
+								}
+							}
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							if(carroexiste!=1){
+								printf("Carro nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
+							printf("Digite a quantidade de diarias: ");
+							scanf("%d", &diaria);
+							
+							printf("\n\n\n+---------------------------------------+\n  Empresa: %s", nomepj);
+							printf("  Placa do Carro: %s\n", placalocador);
+							printf("  Modelo: %s", modelo);
+							printf("  Retirada: %d/%d/%d-%i:%i:%i\n", data->tm_mday, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							printf("  Devolucao: %d/%d/%d-%i:%i:%i\n", data->tm_mday + diaria, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							printf("+---------------------------------------+\n\n");
+							
+							arquivo = ChamaArquivo("CarroAlugado.txt", 'g');
+							
+							fprintf(arquivo,"\n\n%s", placalocador);
+							fprintf(arquivo,"\n%s", modelo);
+							fprintf(arquivo, "%d/%d/%d-%i:%i:%i\n\n", data->tm_mday + diaria, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							
+							printf("1- Voltar ao menu principal\n");
+							scanf("%d", &menu);
+						}
+						}
 						break;
+						}
 						
 					}
 			break;
@@ -303,17 +394,19 @@ int main(){
 				scanf("%d", &devolver);
 				
 					switch(devolver){
-						case 1:
+						case 1:{
+						
+
 							arquivo = ChamaArquivo("DadosPF.txt", 'l');
 							char cpflocador[10];
-							char placalocador[10];
+							char placalocadorpf[10];
 							char modelo[20];
 							char nomepf[20];
 							char idade[3];
 							char linha[800];
 							char idoso[2];
 							int l=0, diaria=0;
-							float valordiaria=105.35, valortotal, desconto;
+							float valordiaria=96.35, valortotal, desconto;
 							strcpy(idoso, "20");
 							system("cls");
 								
@@ -333,11 +426,11 @@ int main(){
 							arquivo = ChamaArquivo("CarroAlugado.txt", 'l');
 							
 							printf("Digite a placa do carro desejado (XXX-0000): ");
-							scanf("%s", &placalocador);
+							scanf("%s", &placalocadorpf);
 							l=0;
 							while(fgets(linha, 800, arquivo)){
 								l++;
-								if(strstr(linha, placalocador) != NULL){
+								if(strstr(linha, placalocadorpf) != NULL){
 									l++;
 									fgets(modelo, 20, arquivo);
 								}
@@ -354,14 +447,14 @@ int main(){
 								valortotal = valortotal-desconto;
 								
 							printf("\n\n\n+---------------------------------------+\n  Nome: %s", nomepf);
-							printf("  Placa do Carro: %s\n", placalocador);
+							printf("  Placa do Carro: %s\n", placalocadorpf);
 							printf("  Modelo: %s", modelo);
 							printf("  Valor total: %.2f\n", valortotal);
 							printf("+---------------------------------------+\n\n");
 								
 							}else{
 							printf("\n\n\n+---------------------------------------+\n  Nome: %s", nomepf);
-							printf("  Placa do Carro: %s\n", placalocador);
+							printf("  Placa do Carro: %s\n", placalocadorpf);
 							printf("  Modelo: %s", modelo);
 							printf("Valor total: %.2f\n", valortotal);
 							printf("+---------------------------------------+\n\n");
@@ -369,11 +462,83 @@ int main(){
 							
 							printf("1- Voltar ao menu principal\n");
 							scanf("%d", &menu);
-						break;
+						break;}
+						case 2:{
+
+							arquivo = ChamaArquivo("DadosPJ.txt", 'l');
+							char cnpjlocador[10];
+							char placalocadorpj[10];
+							int parceira;
+							char modelo[20];
+							char nomepj[20];
+							char linha[800];
+							int l=0, diaria=0;
+							float valordiaria=96.35, valortotal, desconto;
+							system("cls");
+								
+							printf("Digite o CNPJ(Somente numeros): ");
+							scanf("%s", &cnpjlocador);
+							
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, cnpjlocador) != NULL){
+									fgets(nomepj, 20, arquivo);
+									
+								}
+							}
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							arquivo = ChamaArquivo("CarroAlugado.txt", 'l');
+							
+							printf("Digite a placa do carro desejado (XXX-0000): ");
+							scanf("%s", &placalocadorpj);
+							l=0;
+							while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, placalocadorpj) != NULL){
+									l++;
+									fgets(modelo, 20, arquivo);
+								}
+							}
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							
+							printf("Digite a quantidade de diarias: ");
+							scanf("%d", &diaria);
+							
+							valortotal=valordiaria*diaria;
+							
+							arquivo = ChamaArquivo("EmpresaParceira.txt", 'l');
+								while(fgets(linha, 800, arquivo)){
+								l++;
+								if(strstr(linha, cnpjlocador) != NULL){
+									parceira=1;									
+								}
+							}
+							
+							if(parceira==1){
+								desconto = valortotal*0.05;
+								valortotal = valortotal-desconto;
+								
+								printf("\n\n\n+---------------------------------------+\n  Empresa: %s", nomepj);
+								printf("  Placa do Carro: %s\n", placalocadorpj);
+								printf("  Modelo: %s", modelo);
+								printf("  Valor total: %.2f\n", valortotal);
+								printf("+---------------------------------------+\n\n");
+							}else{
+								printf("\n\n\n+---------------------------------------+\n  Empresa: %s", nomepj);
+								printf("  Placa do Carro: %s\n", placalocadorpj);
+								printf("  Modelo: %s", modelo);
+								printf("  Valor total: %.2f\n", valortotal);
+								printf("+---------------------------------------+\n\n");
+							}
+							
+							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							system("pause");
+						break;}
 						
 					}
 			break;
 			case 4:
+
 				arquivo = ChamaArquivo("CarroDisponivel.txt", 'l'); //chamando função do arquivo e atribuindo a arquivo
 				system("cls");
 				
@@ -383,15 +548,19 @@ int main(){
 				char modelo[20];
 				int ano;
 				char fabricante[20];
+				
 				//laço de repetição enquanto não chegar ao final do arquivo
 				while(!feof(arquivo)){
+					
 					//lista o que contem no arquivo
 					fscanf(arquivo, "%s", &placacarro);
 					fscanf(arquivo, "\n%s", &modelo);
 					fscanf(arquivo, "\n%d", &ano);
 					fscanf(arquivo, "\n%s\n\n", &fabricante);
 					printf("Placa: %s\nModelo: %s\nAno: %d\nFabricante: %s\n\n", placacarro, modelo, ano, fabricante);
+					}
 				}
+				
 				FecharArquivo(arquivo); // Chama função de fechar arquivo
 				
 				printf("1- Voltar ao menu principal\n");
