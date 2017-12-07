@@ -29,7 +29,7 @@ struct carro{
 	char modelo[20];
 	int ano;
 	char fabricante[20];
-	int disponivel;
+
 };
 
 //Função para chamar arquivo indicando que é do tipo FILE
@@ -82,12 +82,13 @@ int main(){
 		scanf("%d", &menu);
 		//escolhas do menu principal
 		switch(menu){
-			case 1:
+			case 1:{
+
 				system("cls");
 				
 				printf("\t\t\tLegal Rent a Car - Cadastro\n\n");
 				//submenu da opcao cadastrar
-				printf("Escolha uma opcao de cadastro:\n 1- Pessoa Fisica\n 2- Pessoa Juridica\n 3- Automovel\n 4- Voltar ao menu anterior\n");
+				printf("Escolha uma opcao de cadastro:\n 1- Pessoa Fisica\n 2- Pessoa Juridica\n 3- Automovel\n 4- Voltar ao menu principal\n");
 				scanf("%d", &cadastrar);
 					//escolhas submenu cadastrar
 					switch(cadastrar){
@@ -213,21 +214,24 @@ int main(){
 							fflush(stdin);
 							printf("Digite o fabricante do carro: ");
 							scanf("%s", &dadoscarro.fabricante);
-							fprintf(arquivo, "\n%s", dadoscarro.fabricante); //gravando no arquivo
+							fprintf(arquivo, "\n%s\n\n", dadoscarro.fabricante); //gravando no arquivo
 							fflush(stdin);
-							fprintf(arquivo, "\n1\n\n", dadoscarro.disponivel);
+							
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
 							
 							printf("\n1- Voltar ao menu principal\n");
 							scanf("%d", &menu);	
 						break;
+							printf("4- Voltar ao menu principal\n");
+							scanf("%d", &menu);	
 					}
-			break;
-			case 2:
+			break;}
+			case 2:{
+			
 				system("cls");
 				
 				printf("\t\t\tLegal Rent a Car - Alugar Carro\n\n");
-				printf("Escolha uma opcao de locador:\n 1- Pessoa Fisica\n 2- Pessoa Juridica\n");
+				printf("Escolha uma opcao de locador:\n 1- Pessoa Fisica\n 2- Pessoa Juridica\n 3- Voltar ao menu principal\n");
 				scanf("%d", &alugar);
 					//escolhas submenu aludar
 					switch(alugar){
@@ -236,9 +240,12 @@ int main(){
 							char cpflocador[10];
 							char placalocador[10];
 							char modelo[20];
+							char ano[4];
+							char fabricante[20];
 							char nomepf[20];
 							char linha[800];
 							int l=0, diaria=0, pessoaexiste, carroexiste;
+							int delete1, delete2, delete3, delete4;
 							time_t data_tempo;
 							time(&data_tempo);
 							
@@ -270,11 +277,20 @@ int main(){
 							printf("Digite a placa do carro desejado (XXX-0000): ");
 							scanf("%s", &placalocador);
 							l=0;
+							
 							while(fgets(linha, 800, arquivo)){
 								l++;
 								if(strstr(linha, placalocador) != NULL){
+									delete1=l;
 									l++;
+									delete2=l;
 									fgets(modelo, 20, arquivo);
+									l++;
+									delete3=l;
+									fgets(ano, 4, arquivo);
+									l++;
+									delete4=l;
+									fgets(fabricante, 20, arquivo);
 									carroexiste=1;
 								}
 							}
@@ -299,9 +315,39 @@ int main(){
 							
 							fprintf(arquivo,"%s", placalocador);
 							fprintf(arquivo,"\n%s", modelo);
+							fprintf(arquivo,"%s", ano);
+							fprintf(arquivo,"%s", fabricante);
 							fprintf(arquivo, "%d/%d/%d-%i:%i:%i\n\n", data->tm_mday + diaria, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
 							
+							char ch;
+    						int temp = 0;
+    						FILE *arquivo2;
+							arquivo = ChamaArquivo("CarroDisponivel.txt", 'l');
+							ch = getc(arquivo);
+							rewind(arquivo);
+							arquivo2 = fopen("CarroDisponivel2.txt", "w");
+							ch = 'A';
+						    while (ch != EOF){
+						        ch = getc(arquivo);
+						        //pula as linhas que não é pra gravar
+						        if (temp != delete1){
+						            //copia as outras linhas no carrodisponivel2
+						            putc(ch, arquivo2);
+						        }else if(temp != delete2){
+						        	putc(ch, arquivo2);
+								}else if(temp != delete3){
+									putc(ch, arquivo2);
+								}else if(temp != delete4){
+									putc(ch, arquivo2);
+								}
+						            temp++;
+						    }
+						    fclose(arquivo2);
+						    FecharArquivo(arquivo); // Chama função de fechar arquivo
+						    remove("CarroDisponivel.txt");
+						    rename("CarroDisponivel2.txt", "CarroDisponivel.txt");
+						    
 							printf("1- Voltar ao menu principal\n");
 							scanf("%d", &menu);
 							}
@@ -312,9 +358,12 @@ int main(){
 							char cnpjlocador[10];
 							char placalocador[10];
 							char modelo[20];
+							char ano[4];
+							char fabricante[20];
 							char nomepj[20];
 							char linha[800];
 							int l=0, diaria=0, empresaexiste, carroexiste;
+							int delete1, delete2, delete3, delete4;
 							time_t data_tempo;
 							time(&data_tempo);
 							
@@ -349,8 +398,16 @@ int main(){
 							while(fgets(linha, 800, arquivo)){
 								l++;
 								if(strstr(linha, placalocador) != NULL){
+									delete1=l;
 									l++;
+									delete2=l;
 									fgets(modelo, 20, arquivo);
+									l++;
+									delete3=l;
+									fgets(ano, 4, arquivo);
+									l++;
+									delete4=l;
+									fgets(fabricante, 20, arquivo);
 									carroexiste=1;
 								}
 							}
@@ -372,25 +429,57 @@ int main(){
 							
 							arquivo = ChamaArquivo("CarroAlugado.txt", 'g');
 							
-							fprintf(arquivo,"\n\n%s", placalocador);
-							fprintf(arquivo,"\n%s", modelo);
-							fprintf(arquivo, "%d/%d/%d-%i:%i:%i\n\n", data->tm_mday + diaria, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							fprintf(arquivo,"%s", placalocador);
+							fprintf(arquivo,"\n%s\n", modelo);
+							fprintf(arquivo,"%s", ano);
+							fprintf(arquivo,"%s", fabricante);
+							fprintf(arquivo, "%d/%d/%d-%i:%i:%i\n", data->tm_mday + diaria, data->tm_mon, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							
+							char ch;
+    						int temp = 0;
+    						FILE *arquivo2;
+							arquivo = ChamaArquivo("CarroDisponivel.txt", 'l');
+							ch = getc(arquivo);
+							rewind(arquivo);
+							arquivo2 = fopen("CarroDisponivel2.txt", "w");
+							ch = 'A';
+						    while (ch != EOF){
+						        ch = getc(arquivo);
+						        //pula as linhas que não é pra gravar
+						        if (temp != delete1){
+						            //copia as outras linhas no carrodisponivel2
+						            putc(ch, arquivo2);
+						        }else if(temp != delete2){
+						        	putc(ch, arquivo2);
+								}else if(temp != delete3){
+									putc(ch, arquivo2);
+								}else if(temp != delete4){
+									putc(ch, arquivo2);
+								}
+						            temp++;
+						    }
+						    fclose(arquivo2);
+						    FecharArquivo(arquivo); // Chama função de fechar arquivo
+						    remove("CarroDisponivel.txt");
+						    rename("CarroDisponivel2.txt", "CarroDisponivel.txt");
 							
 							printf("1- Voltar ao menu principal\n");
 							scanf("%d", &menu);
 						}
 						}
 						break;
+							printf("3- Voltar ao menu principal\n");
+							scanf("%d", &menu);	
 						}
 						
 					}
-			break;
-			case 3:
+			break;}
+			case 3:{
 				system("cls");
 				
 				printf("\t\t\tLegal Rent a Car - Devolver Carro\n\n");
-				printf("Escolha uma opcao de locador:\n 1- Pessoa Fisica\n 2- Pessoa Juridica\n");
+				printf("Escolha uma opcao de locador:\n 1- Pessoa Fisica\n 2- Pessoa Juridica\n 3- Voltar ao menu principal\n");
 				scanf("%d", &devolver);
 				
 					switch(devolver){
@@ -459,6 +548,34 @@ int main(){
 							printf("Valor total: %.2f\n", valortotal);
 							printf("+---------------------------------------+\n\n");
 							}
+							
+							char ch;
+    						int temp = 0;
+    						FILE *arquivo2;
+							arquivo = ChamaArquivo("CarroDisponivel.txt", 'l');
+							ch = getc(arquivo);
+							rewind(arquivo);
+							arquivo2 = fopen("CarroDisponivel2.txt", "w");
+							ch = 'A';
+						    while (ch != EOF){
+						        ch = getc(arquivo);
+						        //pula as linhas que não é pra gravar
+						        if (temp != delete1){
+						            //copia as outras linhas no carrodisponivel2
+						            putc(ch, arquivo2);
+						        }else if(temp != delete2){
+						        	putc(ch, arquivo2);
+								}else if(temp != delete3){
+									putc(ch, arquivo2);
+								}else if(temp != delete4){
+									putc(ch, arquivo2);
+								}
+						            temp++;
+						    }
+						    fclose(arquivo2);
+						    FecharArquivo(arquivo); // Chama função de fechar arquivo
+						    remove("CarroDisponivel.txt");
+						    rename("CarroDisponivel2.txt", "CarroDisponivel.txt");
 							
 							printf("1- Voltar ao menu principal\n");
 							scanf("%d", &menu);
@@ -534,11 +651,12 @@ int main(){
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
 							system("pause");
 						break;}
+						printf("3- Voltar ao menu principal\n");
+							scanf("%d", &menu);	
 						
 					}
-			break;
-			case 4:
-
+			break;}
+			case 4:{
 				arquivo = ChamaArquivo("CarroDisponivel.txt", 'l'); //chamando função do arquivo e atribuindo a arquivo
 				system("cls");
 				
@@ -553,7 +671,7 @@ int main(){
 				while(!feof(arquivo)){
 					
 					//lista o que contem no arquivo
-					fscanf(arquivo, "%s", &placacarro);
+					fscanf(arquivo, "\n%s", &placacarro);
 					fscanf(arquivo, "\n%s", &modelo);
 					fscanf(arquivo, "\n%d", &ano);
 					fscanf(arquivo, "\n%s\n\n", &fabricante);
@@ -565,8 +683,9 @@ int main(){
 				
 				printf("1- Voltar ao menu principal\n");
 				scanf("%d", &menu);				
-			break;
-			case 5:
+
+			break;}
+			/*case 5:{
 				arquivo = ChamaArquivo("CarroAlugado.txt", 'l'); //chamando função do arquivo e atribuindo a arquivo
 				system("cls");
 				
@@ -587,8 +706,8 @@ int main(){
 				
 				printf("1- Voltar ao menu principal\n");
 				scanf("%d", &menu);				
-			break;
-			case 6:
+			break;}
+			case 6:{
 				arquivo = ChamaArquivo("EmpresaParceira.txt", 'l'); //chamando função do arquivo e atribuindo a arquivo
 				system("cls");
 				
@@ -607,8 +726,7 @@ int main(){
 				
 				printf("1- Voltar ao menu principal\n");
 				scanf("%d", &menu);	
-			break;
+			break;}*/
 		}
-	
-	}
+
 }
