@@ -244,7 +244,7 @@ int main(){
 							char fabricante[20];
 							char nomepf[20];
 							char linha[800];
-							int l=0, diaria=0, pessoaexiste, carroexiste;
+							int l=0, diaria=0, pessoaexiste=0, carroexiste=0;
 							int delete1, delete2, delete3, delete4;
 							time_t data_tempo;
 							time(&data_tempo);
@@ -359,7 +359,7 @@ int main(){
 							char fabricante[20];
 							char nomepj[20];
 							char linha[800];
-							int l=0, diaria=0, empresaexiste, carroexiste;
+							int l=0, diaria=0, empresaexiste=0, carroexiste=0;
 							int delete1, delete2, delete3, delete4;
 							time_t data_tempo;
 							time(&data_tempo);
@@ -491,7 +491,7 @@ int main(){
 							char idade[3];
 							char linha[800];
 							char idoso[2];
-							int l=0, diaria=0, carroexiste;
+							int l=0, diaria=0, carroexiste=0, pessoaexiste=0;
 							float valordiaria=96.35, valortotal, desconto;
 							int delete1, delete2, delete3, delete4, delete5;
 							strcpy(idoso, "60");
@@ -507,10 +507,16 @@ int main(){
 									fgets(nomepf, 20, arquivo);
 									l++;
 									fgets(idade, 3, arquivo);
+									pessoaexiste=1;
 								}
 							}
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
 							arquivo = ChamaArquivo("CarroAlugado.txt", 'l');
+							if(pessoaexiste!=1){
+								printf("CPF nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
 							
 							printf("Digite a placa do carro desejado (XXX-0000): ");
 							scanf("%s", &placalocadorpf);
@@ -535,7 +541,11 @@ int main(){
 								}
 							}
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
-							
+							if(carroexiste!=1){
+								printf("Carro nao disponivel ou nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
 							printf("Digite a quantidade de diarias: ");
 							scanf("%d", &diaria);
 							
@@ -593,6 +603,8 @@ int main(){
 							
 							printf("1- Voltar ao menu principal\n");
 							scanf("%d", &menu);
+						}
+					}
 						break;}
 						case 2:{
 
@@ -606,7 +618,7 @@ int main(){
 							char devolucao[30];
 							char nomepj[20];
 							char linha[800];
-							int l=0, diaria=0, carroexiste;
+							int l=0, diaria=0, carroexiste=0, empresaexiste=0;
 							float valordiaria=96.35, valortotal, desconto;
 							int delete1, delete2, delete3, delete4, delete5;
 							system("cls");
@@ -623,7 +635,11 @@ int main(){
 							}
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
 							arquivo = ChamaArquivo("CarroAlugado.txt", 'l');
-							
+							if(empresaexiste!=1){
+								printf("CNPJ nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
 							printf("Digite a placa do carro desejado (XXX-0000): ");
 							scanf("%s", &placalocadorpj);
 							l=0;
@@ -647,6 +663,11 @@ int main(){
 								}
 							}
 							FecharArquivo(arquivo); // Chama função de fechar arquivo
+							if(carroexiste!=1){
+								printf("Carro nao disponivel ou nao cadastrado\n\n");
+								printf("1- Voltar ao menu principal\n");
+								scanf("%d", &menu);
+							}else{
 							printf("%d\n%d\n%d\n%d\n%d\n", delete1, delete2, delete3, delete4, delete5);
 							printf("Digite a quantidade de diarias: ");
 							scanf("%d", &diaria);
@@ -713,12 +734,13 @@ int main(){
 						    
 						    printf("1- Voltar ao menu principal\n");
 							scanf("%d", &menu);	
-						    
+						
 						break;}
 						printf("3- Voltar ao menu principal\n");
 							scanf("%d", &menu);	
-						
+				}
 					}
+				}
 			break;}
 			case 4:{
 				arquivo = ChamaArquivo("CarroDisponivel.txt", 'l'); //chamando função do arquivo e atribuindo a arquivo
