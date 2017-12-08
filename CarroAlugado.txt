@@ -2,7 +2,8 @@ BBB-1234
 Onix
 2017
 Chevrolet
-11/11/2017-15:14:11DDD-1234
+11/11/2017-15:14:11
+DDD-1234
 Onix
 2017
 Chevrolet
