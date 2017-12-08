@@ -113,7 +113,7 @@ int main(){
 							fprintf(arquivo, "\n%d", dadospf.idade);//gravando no arquivo
 							fflush(stdin);
 							printf("Digite o sexo (F/M): ");
-							scanf("%s", &dadospf.sexo[i]);
+							scanf("%s", &dadospf.sexo);
 							fprintf(arquivo, "\n%s", dadospf.sexo); //gravando no arquivo
 							fflush(stdin);
 							printf("Digite o telefone (Somente numeros): ");
@@ -121,11 +121,11 @@ int main(){
 							fprintf(arquivo, "\n%d", dadospf.telpf); //gravando no arquivo
 							fflush(stdin);
 							printf("Digite o email: ");
-							scanf("%s", &dadospf.email[i]);
+							scanf("%s", &dadospf.email);
 							fprintf(arquivo, "\n%s", dadospf.email); //gravando no arquivo
 							fflush(stdin);
 							printf("Digite a cidade: ");
-							scanf("%s", &dadospf.cidadepf[i]);
+							scanf("%s", &dadospf.cidadepf);
 							fprintf(arquivo, "\n%s\n\n", dadospf.cidadepf); //gravando no arquivo
 							fflush(stdin);
 							
@@ -143,7 +143,7 @@ int main(){
 							fflush(stdin);//limpa memoria do teclado
 							//cadastro de pessoa juridica
 							printf("Digite o CNPJ (Somente numeros): ");
-							scanf("%s", &dadospj.cnpj[i]);
+							scanf("%s", &dadospj.cnpj);
 							fprintf(arquivo, "%s", dadospj.cnpj);
 							fflush(stdin); 
 							printf("Digite o nome da empresa: ");
@@ -155,11 +155,11 @@ int main(){
 							fprintf(arquivo, "\n%d", dadospj.telpj); //gravando no arquivo
 							fflush(stdin);
 							printf("Digite a cidade: ");
-							scanf("%s", &dadospj.cidadepj[i]);
+							scanf("%s", &dadospj.cidadepj);
 							fprintf(arquivo, "\n%s", dadospj.cidadepj); //gravando no arquivo
 							fflush(stdin);
 							printf("Empresa eh parceira? (Sim/Nao): ");
-							scanf("%s", &dadospj.parceira[i]);
+							scanf("%s", &dadospj.parceira);
 							fprintf(arquivo, "\n%s\n\n", dadospj.parceira); //gravando no arquivo
 							fflush(stdin);
 							
@@ -205,7 +205,7 @@ int main(){
 							fprintf(arquivo, "%s", dadoscarro.placacarro); //gravando no arquivo
 							fflush(stdin);
 							printf("Digite o modelo do carro: ");
-							scanf("%s", &dadoscarro.modelo[i]);
+							scanf("%s", &dadoscarro.modelo);
 							fprintf(arquivo, "\n%s", dadoscarro.modelo);
 							fflush(stdin);
 							printf("Digite o ano do carro : ");

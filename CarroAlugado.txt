@@ -1,11 +1,6 @@
-BBB-1234
-Onix
-2017
-Chevrolet
-11/11/2017-15:14:11
 DDD-1234
-Onix
+Palio
 2017
-Chevrolet
+Fiat
 11/12/2017-15:27:16
-ÿ
+
