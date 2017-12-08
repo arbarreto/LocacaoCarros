@@ -1,11 +1,9 @@
-DDD-1234
-HB217
-Hyndai
 EEE-1234
-HB20
-2017
-Hyndai
-ABC-5678
 Onix
-2018
+2017
 Chevrolet
+FFF-1234
+Onix
+2017
+Chevrolet
+ÿ
