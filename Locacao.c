@@ -246,6 +246,7 @@ int main(){
 							char linha[800];
 							int l=0, diaria=0, pessoaexiste=0, carroexiste=0;
 							int delete1, delete2, delete3, delete4;
+							float valordiaria=96.35, valorestimado;
 							time_t data_tempo;
 							time(&data_tempo);
 							
@@ -305,11 +306,14 @@ int main(){
 							printf("Digite a quantidade de diarias: ");
 							scanf("%d", &diaria);
 							
+							valorestimado=valordiaria*diaria;
+							
 							printf("\n\n\n+---------------------------------------+\n  Nome: %s", nomepf);
 							printf("  Placa do Carro: %s\n", placalocador);
 							printf("  Modelo: %s", modelo);
 							printf("  Retirada: %d/12/%d-%i:%i:%i\n", data->tm_mday, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
 							printf("  Devolucao: %d/12/%d-%i:%i:%i\n", data->tm_mday + diaria, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							printf("  Valor Estimado: %.2f\n  *Sugeito a alteracao\n", valorestimado);
 							printf("+---------------------------------------+\n\n");
 							
 							arquivo = ChamaArquivo("CarroAlugado.txt", 'g');
@@ -361,6 +365,7 @@ int main(){
 							char linha[800];
 							int l=0, diaria=0, empresaexiste=0, carroexiste=0;
 							int delete1, delete2, delete3, delete4;
+							float valordiaria=96.35, valorestimado;
 							time_t data_tempo;
 							time(&data_tempo);
 							
@@ -417,11 +422,14 @@ int main(){
 							printf("Digite a quantidade de diarias: ");
 							scanf("%d", &diaria);
 							
+							valorestimado=valordiaria*diaria;
+							
 							printf("\n\n\n+---------------------------------------+\n  Empresa: %s", nomepj);
 							printf("  Placa do Carro: %s\n", placalocador);
 							printf("  Modelo: %s", modelo);
 							printf("  Retirada: %d/12/%d-%i:%i:%i\n", data->tm_mday, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
 							printf("  Devolucao: %d/12/%d-%i:%i:%i\n", data->tm_mday + diaria, data->tm_year + 1900, tempo->tm_hour, tempo->tm_min, tempo->tm_sec );
+							printf("  Valor Estimado: %.2f\n  *Sugeito a alteracao\n", valorestimado);
 							printf("+---------------------------------------+\n\n");
 							
 							arquivo = ChamaArquivo("CarroAlugado.txt", 'g');
